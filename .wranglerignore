@@ -1,0 +1,9 @@
+node_modules
+.vscode
+.git
+obsidian_copy.md
+server.pid
+start-server.command
+test-*.js
+output.html
+package*.json

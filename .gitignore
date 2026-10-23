@@ -1,0 +1,60 @@
+# macOS & OS artifacts
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# AI Assistant & Private Vault Configurations
+.agents/
+
+# Node.js & Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Cloudflare & Wrangler
+.wrangler/
+
+# Python & Runtime cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pid
+server.pid
+
+# Build, Dist & Test dumps
+dist/
+build/
+out/
+output.html
+*.app
+*.dmg
+*.pkg
+*.exe
+*.zip
+*.tar.*
+
+# Environment, Secrets & Passwords
+.env
+.env.*
+*.pem
+*.key
+*.cert
+Passw*
+*secret*
+*token*

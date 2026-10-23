@@ -1,0 +1,27 @@
+{
+  "name": "buchhaltungstrainer",
+  "version": "0.2.5",
+  "description": "Interaktiver Buchhaltungstrainer & ERP-Simulator (Inventur, Inventar, Bilanz, Buchführung, Warenwirtschaft)",
+  "main": "script.js",
+  "scripts": {
+    "start": "python3 -m http.server 8085",
+    "test": "node test-script.js && node test-node.js && node test-dom.js",
+    "build:release": "bash deploy_release.sh --build-only"
+  },
+  "keywords": [
+    "buchhaltung",
+    "accounting",
+    "education",
+    "simulator",
+    "erp",
+    "fibu",
+    "bilanz",
+    "inventur",
+    "didactics"
+  ],
+  "author": "mrgoldsmitt",
+  "license": "MIT",
+  "dependencies": {
+    "jsdom": "^29.1.1"
+  }
+}

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Interaktiver Buchhaltungstrainer für Schüler. Inventur, Inventar, Bilanz und Buchungssätze lernen.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <title>Buchhaltungstrainer</title>
+    <link rel="stylesheet" href="style.css?v=22">
+</head>
+
+<body>
+
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="header-left-group">
+            <button class="header-toggle-btn" onclick="toggleSidebar()" aria-label="Menü ein/ausblenden">☰</button>
+            <div class="header-title-container">
+                <h1 class="header-title">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="header-logo-icon">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                    <span>Buchhaltungstrainer</span>
+                </h1>
+                <span class="sap-system-pill">Mandant 100 &bull; FI/CO</span>
+            </div>
+        </div>
+        <div class="header-tools">
+            <div class="header-theme-selector" role="group" aria-label="Theme wählen">
+                <button type="button" class="header-theme-btn" data-theme="dark" onclick="setTheme('dark')" title="Dunkles Design">🌙</button>
+                <button type="button" class="header-theme-btn" data-theme="light" onclick="setTheme('light')" title="Helles Design">☀️</button>
+                <button type="button" class="header-theme-btn" data-theme="sap" onclick="setTheme('sap')" title="Pro-Design"><span class="sap-text-icon">PRO</span></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header-mobile">
+            <h2>Menü</h2>
+            <button class="close-sidebar-btn" onclick="toggleSidebar()">×</button>
+        </div>
+
+        <div class="logo-area">
+            <h1>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    style="vertical-align: middle; margin-right: 0.5rem;">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+                BT-Trainer
+            </h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Buchführung interaktiv <span style="font-size: 0.7rem; opacity: 0.7;">v.0.2.5</span></p>
+        </div>
+
+        <div class="control-group theme-control-group" style="margin-top: -1rem;">
+            <label class="theme-control-label" id="theme-group-label">Design / Theme</label>
+            <div class="theme-segmented-control" role="group" aria-labelledby="theme-group-label">
+                <button type="button" class="theme-opt-btn" data-theme="dark" onclick="setTheme('dark')" title="Dunkles Design">
+                    <span class="theme-icon">🌙</span> Dunkel
+                </button>
+                <button type="button" class="theme-opt-btn" data-theme="light" onclick="setTheme('light')" title="Helles Design">
+                    <span class="theme-icon">☀️</span> Hell
+                </button>
+                <button type="button" class="theme-opt-btn" data-theme="sap" onclick="setTheme('sap')" title="Pro-Design">
+                    <span class="theme-icon">💼</span> Pro
+                </button>
+            </div>
+        </div>
+
+        <div class="control-group" style="margin-top: -1rem;">
+            <label>Lerntools</label>
+            <div class="nav-container">
+                <button class="nav-btn active" onclick="setMode('theorie')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="vertical-align: middle; margin-bottom: 2px; margin-right: 0.2rem;">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    Theorie
+                </button>
+                <button class="nav-btn" onclick="setMode('inventur')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="vertical-align: middle; margin-bottom: 2px; margin-right: 0.2rem;">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    Inventur
+                </button>
+                <button class="nav-btn" onclick="setMode('inventar')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="vertical-align: middle; margin-bottom: 2px; margin-right: 0.2rem;">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    Inventar
+                </button>
+                <button class="nav-btn" onclick="setMode('bilanz')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="vertical-align: middle; margin-bottom: 2px; margin-right: 0.2rem;">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    Bilanz
+                </button>
+                <button class="nav-btn" onclick="setMode('buchung')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="vertical-align: middle; margin-bottom: 2px; margin-right: 0.2rem;">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                    FiBu
+                </button>
+                <button class="nav-btn" onclick="setMode('stationen')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="vertical-align: middle; margin-bottom: 2px; margin-right: 0.2rem;">
+                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                        <line x1="4" y1="22" x2="4" y2="15"></line>
+                    </svg>
+                    Stationenlernen
+                </button>
+                <button class="nav-btn" onclick="setMode('warenwirtschaft')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="vertical-align: middle; margin-bottom: 2px; margin-right: 0.2rem;">
+                        <path d="M2 20h20"></path>
+                        <path d="M5 20V8l7-5 7 5v12"></path>
+                        <path d="M9 20v-4h6v4"></path>
+                        <path d="M9 12h.01"></path>
+                        <path d="M15 12h.01"></path>
+                    </svg>
+                    Warenwirtschaft
+                </button>
+            </div>
+        </div>
+
+        <div style="margin-top: auto; color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 1rem 0;">
+            <p style="margin-bottom: 0.3rem;">&copy; 2026 mrgoldsmitt | v.0.2.5</p>
+            <div style="display: flex; justify-content: center; gap: 0.8rem; align-items: center;">
+                <a href="#" onclick="setMode('impressum')" class="footer-link impressum-link">Impressum</a>
+                <span class="footer-dot">|</span>
+                <a href="#" onclick="setMode('changelog')" class="footer-link changelog-link">Changelog</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Theorie Section -->
+        <section id="theorie-section" class="section active">
+            <h2 style="margin-bottom: 1.5rem; color: var(--fly-blue, #4682B4);">Theorie der Buchführung</h2>
+            <div id="theorie-container">
+                <!-- Injected via theorie.js -->
+            </div>
+        </section>
+
+        <!-- Inventur Section -->
+        <section id="inventur-section" class="section">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+                <h2 style="margin: 0; color: var(--fly-blue, #4682B4);">Fire Bike GmbH – Lagerhalle</h2>
+                <span style="color: var(--fly-orange, #F39C12); font-weight: bold;">Inventur-Simulation</span>
+            </div>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
+                Klicke auf die Lagerregale und Belege, um die Mengen zu ermitteln (Zählen, Wiegen, Messen). Trage deine
+                Ergebnisse rechts in die Inventurliste ein und berechne den Gesamtwert.
+            </p>
+            <div id="inventur-container">
+                <!-- Injected via inventur.js -->
+            </div>
+            
+            <!-- Data Management UI -->
+            <div class="data-mgmt-section" ondragover="btHandleDragOver(event)" ondragleave="btHandleDragLeave(event)" ondrop="btHandleDrop(event)" style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; border-radius: 8px; background: rgba(0,0,0,0.15); padding: 1.5rem;">
+                <h4 style="margin-bottom: 0.75rem; color: var(--text-main); font-size: 1rem;">⬇️ ⬆️ Daten-Management (Sicherung)</h4>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn-primary" style="margin: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--primary); padding: 0.5rem 1rem; color: var(--primary);" onclick="btExportJSON()">
+                        💾 Arbeitsstand herunterladen
+                    </button>
+                    <button class="btn-primary" style="margin: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--primary); padding: 0.5rem 1rem; color: var(--primary);" onclick="document.getElementById('bt-import-file-inventur').click()">
+                        📂 Arbeitsstand hochladen
+                    </button>
+                    <input type="file" id="bt-import-file-inventur" style="display: none" accept=".json" onchange="btHandleImport(event)">
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+                    Eine JSON-Datei hierher ziehen (Drag & Drop) oder über den Button auswählen, um den Arbeitsstand zu laden.
+                </div>
+            </div>
+        </section>
+
+        <!-- Inventar Section -->
+        <section id="inventar-section" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Inventar erstellen</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Übertrage nun die erfassten Positionen der
+                Inventur in das Inventar. Sortiere das Vermögen (Aktiva) nach Flüssigkeit und die Schulden (Passiva)
+                nach Fälligkeit.</p>
+            <div id="inventar-container"></div>
+            
+            <!-- Data Management UI -->
+            <div class="data-mgmt-section" ondragover="btHandleDragOver(event)" ondragleave="btHandleDragLeave(event)" ondrop="btHandleDrop(event)" style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; border-radius: 8px; background: rgba(0,0,0,0.15); padding: 1.5rem;">
+                <h4 style="margin-bottom: 0.75rem; color: var(--text-main); font-size: 1rem;">⬇️ ⬆️ Daten-Management (Sicherung)</h4>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn-primary" style="margin: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--primary); padding: 0.5rem 1rem; color: var(--primary);" onclick="btExportJSON()">
+                        💾 Arbeitsstand herunterladen
+                    </button>
+                    <button class="btn-primary" style="margin: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--primary); padding: 0.5rem 1rem; color: var(--primary);" onclick="document.getElementById('bt-import-file-inventar').click()">
+                        📂 Arbeitsstand hochladen
+                    </button>
+                    <input type="file" id="bt-import-file-inventar" style="display: none" accept=".json" onchange="btHandleImport(event)">
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+                    Eine JSON-Datei hierher ziehen (Drag & Drop) oder über den Button auswählen, um den Arbeitsstand zu laden.
+                </div>
+            </div>
+        </section>
+
+        <!-- Bilanz Section -->
+        <section id="bilanz-section" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Bilanz aufstellen</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Erstelle aus dem Inventar eine Kurzfassung in
+                Kontoform: Die Bilanz. Auf der linken Seite (Aktiva) steht die Mittelverwendung (Vermögen), auf der
+                rechten Seite (Passiva) die Mittelherkunft (Kapital).</p>
+            <div id="bilanz-container"></div>
+            
+            <!-- Data Management UI -->
+            <div class="data-mgmt-section" ondragover="btHandleDragOver(event)" ondragleave="btHandleDragLeave(event)" ondrop="btHandleDrop(event)" style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; border-radius: 8px; background: rgba(0,0,0,0.15); padding: 1.5rem;">
+                <h4 style="margin-bottom: 0.75rem; color: var(--text-main); font-size: 1rem;">⬇️ ⬆️ Daten-Management (Sicherung)</h4>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn-primary" style="margin: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--primary); padding: 0.5rem 1rem; color: var(--primary);" onclick="btExportJSON()">
+                        💾 Arbeitsstand herunterladen
+                    </button>
+                    <button class="btn-primary" style="margin: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--primary); padding: 0.5rem 1rem; color: var(--primary);" onclick="document.getElementById('bt-import-file-bilanz').click()">
+                        📂 Arbeitsstand hochladen
+                    </button>
+                    <input type="file" id="bt-import-file-bilanz" style="display: none" accept=".json" onchange="btHandleImport(event)">
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+                    Eine JSON-Datei hierher ziehen (Drag & Drop) oder über den Button auswählen, um den Arbeitsstand zu laden.
+                </div>
+            </div>
+        </section>
+
+        <!-- Buchführung Section -->
+        <section id="buchung-section" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Buchführung (Journal & Hauptbuch)</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Bilde für verschiedene Geschäftsfälle
+                Buchungssätze und trage die Beträge in die vorbereiteten T-Konten ein ("Soll an Haben").</p>
+            <div id="buchung-container"></div>
+        </section>
+
+        <!-- Stationenlernen Section -->
+        <section id="stationen-section" class="section">
+            <h2 style="margin-bottom: 1.5rem; color: var(--fly-blue, #4682B4);">Stationenlernen</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Bearbeite verschiedene Stationen zu den Themen
+                der Buchführung. Jede Station enthält 5 Aufgaben mit steigendem Schwierigkeitsgrad (Anforderungsbereich
+                I bis III).</p>
+            <div id="stationen-container"></div>
+        </section>
+
+        <!-- Warenwirtschaft Section -->
+        <section id="warenwirtschaft-section" class="section">
+            <div id="warenwirtschaft-container"></div>
+        </section>
+
+        <!-- Changelog Section -->
+        <section id="changelog-section" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Changelog & Projekt-Historie</h2>
+            <div class="changelog-container">
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.0.2.5</span>
+                        <span class="version-date">17. Oktober 2026 (Aktuell)</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>✨ Neues Theme: Pro (Enterprise Edition)</h3>
+                        <ul>
+                            <li><strong>Enterprise Look & Feel:</strong> Neues, professionelles Pro-Theme im modernen ERP-Design (Fiori Horizon). Hochkontrastiges, klares Design für realitätsnahes Arbeiten und kaufmännische Ausbildung.</li>
+                            <li><strong>Fiori Shell-Bar:</strong> Neuer System-Header mit dezentem Mandanten-Badge ("Mandant 100 • FI/CO").</li>
+                            <li><strong>3-Wege Theme-Switcher:</strong> Schneller Wechsel zwischen Dunkel, Hell und Pro sowohl im Header als auch in der Seitenleiste.</li>
+                            <li><strong>ERP-Simulation im Pro-Stil:</strong> Optimierte T-Konten im Hauptbuch (FI-GL), analytische KPI-Kacheln, Belegbuchungen und Materialwirtschaft.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.0.2.0</span>
+                        <span class="version-date">16. August 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>🐛 Bugfix</h3>
+                        <ul>
+                            <li><strong>Warenwirtschaft:</strong> Mobile Ansicht auf Geräten ab unter 7 Zoll optimiert. Layout-Fehler bei T-Konten und der Überschriftenzeile behoben.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.6.4</span>
+                        <span class="version-date">16. Juli 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>📝 Verbesserung</h3>
+                        <ul>
+                            <li><strong>Warenwirtschaft – Anfängermodus-Hinweis:</strong> Die Hinweistexte in den gesperrten Abteilungen (Vertrieb, Produktion) sowie in der Schwierigkeitsgrad-Auswahl wurden präzisiert. Es wird nun klar kommuniziert, dass im Anfängermodus weder Verkauf, noch Produktion oder AfA möglich sind und diese Funktionen erst ab dem Modus Fortgeschritten verfügbar sind.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.6.3</span>
+                        <span class="version-date">16. Juli 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>✨ Feature</h3>
+                        <ul>
+                            <li><strong>Warenwirtschaft – Anfängermodus:</strong> Im Anfängermodus ist es nicht mehr möglich, Produkte zu produzieren oder zu verkaufen, da sich dieser Modus ausschließlich auf die Bestandsbuchhaltung konzentrieren soll. Die Abteilungen Produktion, Vertrieb sowie AfA sind daher ausgegraut und mit einem Hinweis auf den Fortgeschrittenenmodus nicht verfügbar.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.6.2</span>
+                        <span class="version-date">25. Mai 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>🐛 Bugfixes & Begriffsklärung</h3>
+                        <ul>
+                            <li><strong>Bilanz-Nomenklatur:</strong> Das Anlagekonto 0700 wird in der Eröffnungsbilanz und allen Auswertungen nun fachlich korrekt als „Technische Anlagen und Maschinen“ (nach HGB § 266 und SKR04) statt unpräzise als „Maschinen“ ausgewiesen.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.6.1</span>
+                        <span class="version-date">25. Mai 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>📱 Mobile UI & Bugfixes</h3>
+                        <ul>
+                            <li><strong>Mobile Navigation & Icons:</strong> Beschriftungen der Abteilungen im Warenwirtschafts-Tool werden auf kleinen Bildschirmen (z. B. iPhone 13 Mini) ausgeblendet. Die Icons für Beschaffung und Vertrieb erhielten eindeutige Richtungs-Pfeile (in den bzw. aus dem Warenkorb).</li>
+                            <li><strong>T-Konten Layout:</strong> Anpassung der Schriftgrößen und Paddings für T-Konten und die zugehörige Buttonleiste, um horizontales Abschneiden auf sehr kleinen Displays zu verhindern.</li>
+                            <li><strong>Bugfix Eigenkapital:</strong> Fehler behoben, bei dem der Anfangsbestand für das Eigenkapital-Konto in der T-Konten-Ansicht aufgrund des negativen internen Saldos nicht angezeigt wurde.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.6.0</span>
+                        <span class="version-date">20. Mai 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>🏭 Neue Abteilung „Anlagenmanagement" &amp; umfassende Erweiterungen</h3>
+                        <ul>
+                            <li><strong>Neue Abteilung „Anlagenmanagement":</strong> Vollständige Verwaltung des Anlagevermögens (Gebäude, Maschinen, Fuhrpark, BGA) mit eigenem Sidebar-Bereich, Anlagenverzeichnis, KPI-Dashboard und Industriegebäude-Icon.</li>
+                            <li><strong>Lebenszyklus-Management:</strong> Anschaffung, lineare Abschreibung (AfA, pro-rata temporis) und Verkauf/Abgang von Anlagegütern – jeweils mit vollständiger Buchungsintegration in Grund- und Hauptbuch.</li>
+                            <li><strong>Flexible Zahlungsarten (Split-Payments):</strong> Kauf und Verkauf von Anlagen können nun auf mehrere Konten aufgeteilt werden – z.&nbsp;B. Bank + Bankdarlehen beim Kauf oder Bank + Forderungen beim Verkauf. Dynamische Zahlungszeilen mit „+ Weitere Zahlungsquelle"-Button.</li>
+                            <li><strong>Erweiterte Zahlungskonten:</strong> Kauf über Bank (1200), Kasse (1000), Verbindlichkeiten a.L.L. (4400) und Bankdarlehen (4250). Verkauf über Bank (1200), Kasse (1000) und Forderungen a.L.L. (2400).</li>
+                            <li><strong>Didaktisches Stufenkonzept für Anlagen:</strong>
+                                <ul>
+                                    <li><em>Anfänger:</em> Keine Abschreibungen (AfA). Anlagen werden immer zu Anschaffungskosten verkauft (reiner Aktivtausch).</li>
+                                    <li><em>Fortgeschritten:</em> Inkl. Abschreibungen (AfA) auf Anlagevermögen. Verkauf mit Gewinn/Verlust über Erfolgskonten.</li>
+                                    <li><em>Profi:</em> Wie Fortgeschritten, zusätzlich mit 19&nbsp;% Vor- und Umsatzsteuer auf alle Anlagentransaktionen.</li>
+                                </ul>
+                            </li>
+                            <li><strong>30 neue Geschäftsvorfälle fürs Anlagevermögen:</strong> Jede Niveaustufe wurde um 10 praxisnahe Fälle erweitert (insgesamt 30 neue Fälle für Fuhrpark, Maschinen, BGA).</li>
+                            <li><strong>Bilanz-Integration:</strong> Gebäude, Maschinen, Fuhrpark und BGA sind korrekt in der Eröffnungsbilanz und Eigenkapitalberechnung hinterlegt.</li>
+                            <li><strong>Verbesserte Übungsmodal-Anzeige:</strong> Betrags-Übersicht mit Einzelposten und Gesamtsumme im Practice-Overlay. Positionierung des Overlays korrigiert (fixed statt absolute).</li>
+                            <li><strong>UI-Verbesserungen:</strong> Einheitliches Styling aller Schnellaktions-Buttons. Schwierigkeitsgrad-Beschreibungen mit AfA-Hinweisen ergänzt. AfA-KPIs und -Card werden im Anfängermodus ausgeblendet.</li>
+                            <li><strong>XML-Datenexport/-Import verbessert:</strong> Neue Export-/Import-Routinen für zusammengesetzte Buchungssätze, Anlagegüter, Finanztransaktionen und Einstellungen. Ungültige XML-Zeichen (wie z.&nbsp;B. "&amp;") werden nun beim Export maskiert und beim Import fehlerhafter Alt-Dateien automatisch korrigiert.</li>
+                            <li><strong>Layout-Korrekturen für Modalfenster:</strong> Die Popups für das Buchen im Übungsmodus und die Anschaffung von Anlagegütern wurden visuell optimiert (größere Maximalbreite für zusammengesetzte Zahlungen, breitere Betragsfelder, saubere Abstände).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.5.0</span>
+                        <span class="version-date">16. Mai 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>📚 Zusammengesetzte Buchungssätze (N Soll / M Haben)</h3>
+                        <ul>
+                            <li><strong>Compound Bookings (FiBu):</strong> Das FiBu-Tool unterstützt nun zusammengesetzte Buchungssätze mit beliebig vielen Soll- und Haben-Konten. Das Formular passt sich dynamisch an die Anzahl der benötigten Kontozeilen an.</li>
+                            <li><strong>Compound Bookings (Warenwirtschaft):</strong> Auch die ERP-Simulation verarbeitet zusammengesetzte Buchungssätze. Im Profi-Modus werden Einkäufe und Verkäufe mit Steuer (VoSt/USt) als ein einziger, konsolidierter Buchungssatz dargestellt.</li>
+                            <li><strong>Gemischte Zahlungsarten (Toggle-UI):</strong> In der Beschaffung können nun mehrere Zahlungsarten (Bank, Bar, Ziel) gleichzeitig per Toggle-Buttons aktiviert werden. Bei Mehrfachauswahl erscheinen Betragsfelder pro Zahlungsart mit Live-Restbetrag-Anzeige.</li>
+                            <li><strong>Übungsmodus für Compound-BS:</strong> Das Practice-Modal erkennt zusammengesetzte Buchungssätze und zeigt dynamisch N Soll-Zeilen und M Haben-Zeilen an. Alle Konten und Beträge müssen korrekt zugeordnet werden.</li>
+                            <li><strong>Journal-Darstellung:</strong> Zusammengesetzte Buchungen im Journal erhalten ein &bdquo;Zusammengesetzt&ldquo;-Badge und werden mit mehreren Soll-/Haben-Zeilen dargestellt.</li>
+                        </ul>
+                        <h3>📈 Massive Erweiterung der Geschäftsvorfälle</h3>
+                        <ul>
+                            <li><strong>230+ Geschäftsvorfälle:</strong> Das FiBu-Tool enthält jetzt über 235 verschiedene Buchungsfälle (vorher 22), verteilt auf alle drei Niveaustufen (Anfänger: 84, Fortgeschritten: 78, Profi: 73).</li>
+                            <li><strong>Neue Buchungstypen:</strong> Eigenkapitalerhöhungen, Darlehensaufnahmen/-tilgungen, Materialaufwand, Mietaufwendungen, Zinserträge, Versicherungen, USt-Zahllast, VoSt-Erstattung und viele weitere praxisnahe Geschäftsvorfälle.</li>
+                            <li><strong>Zusammengesetzte Fälle pro Stufe:</strong> Jede Niveaustufe enthält nun spezielle zusammengesetzte Buchungssätze (z.B. Rohstoffeinkauf teils Bank / teils Ziel, Warenverkauf teils bar / teils auf Ziel).</li>
+                        </ul>
+                        <h3>🎓 Prüfungsmodus (FiBu)</h3>
+                        <ul>
+                            <li><strong>Timer-gestützte Prüfung:</strong> Ein neuer Prüfungsmodus kann über den Toggle in der Buchhaltung gestartet werden. Nach Eingabe des Namens haben Schüler 5 Minuten Zeit für 10 zufällige Buchungssätze der gewählten Niveaustufe.</li>
+                            <li><strong>Automatisches PDF-Zertifikat:</strong> Nach Abschluss oder Zeitablauf wird automatisch ein PDF-Zertifikat generiert, welches die erzielte Punktzahl, Prozentwertung und eine detaillierte Aufstellung aller gegebenen und erwarteten Antworten enthält.</li>
+                            <li><strong>Betrugsprävention:</strong> Der Schülername muss zwingend *vor* Prüfungsbeginn eingegeben werden. Er wird fixiert und manipulationssicher auf das finale Zertifikat gedruckt.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.4.3</span>
+                        <span class="version-date">7. Mai 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>🐛 Fehlerbehebungen (Bugfixes)</h3>
+                        <ul>
+                            <li><strong>Stationenlernen:</strong> Bugfix im Stationenlernen - Falsche Antworten werden nun als falsch angezeigt.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.4.2</span>
+                        <span class="version-date">4. Mai 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>📈 ERP-Stabilität & Buchungslogik</h3>
+                        <ul>
+                            <li><strong>Echtzeit-Bilanzgleichgewicht:</strong> Implementierung einer dynamischen Gewinnermittlung auf der Passivseite. Die Bilanz geht nun zu jedem Zeitpunkt (Aktiva === Passiva) auf, auch vor dem Jahresabschluss.</li>
+                            <li><strong>Didaktische Verkaufslogik (Anfänger):</strong> Verkäufe auf Ziel werden im Anfänger-Modus nun als reiner Aktivtausch zum Herstellungspreis verbucht, um den Fokus auf Bestandsänderungen zu legen.</li>
+                            <li><strong>Konsistenz Finanzwesen:</strong> Behebung eines Bugs, bei dem Forderungen im Anfänger-Modus mit dem falschen Betrag (VP statt HK) in der Rechnungsliste erschienen.</li>
+                            <li><strong>Permanente Schwierigkeits-Präferenz:</strong> Der gewählte Lernmodus (Anfänger/Profi) bleibt nun auch nach einem Reset oder Neustart dauerhaft gespeichert.</li>
+                            <li><strong>Didaktische Hinweise:</strong> Anzeige von Erläuterungen zur didaktischen Reduktion direkt unter der Schwierigkeitswahl.</li>
+                            <li><strong>Optimierte Bilanz-Optik:</strong> Rechtsbündige Ausrichtung der Summen in den T-Konten zur besseren Lesbarkeit.</li>
+                            <li><strong>Fehlerkorrektur Vertrieb:</strong> Behebung des Ladefehlers ("Can't find variable: mode") in der Vertriebsansicht.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 1.4.1 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.4.1</span>
+                        <span class="version-date">3. Mai 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>📦 Lagerkapazität & Bestandsmanagement</h3>
+                        <ul>
+                            <li><strong>Realistische Lagerhöchststände:</strong> Einführung von Kapazitätsgrenzen für alle Materialien und Fertigerzeugnisse, um unrealistische Lagerbestände zu verhindern.</li>
+                            <li><strong>Kapazitäts-Monitoring:</strong> Anzeige der freien Lagerkapazität und der Höchststände direkt in der Beschaffungsmaske.</li>
+                            <li><strong>Automatisierte Bestellsperre:</strong> Materialbestellungen werden automatisch blockiert, wenn das Lagerlimit erreicht ist. Die Eingabemenge wird intelligent begrenzt.</li>
+                            <li><strong>Produktionskontrolle:</strong> Fertigstellung von Produkten ist nur möglich, wenn im Fertigerzeugnislager noch Platz vorhanden ist.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 1.4.0 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.4.0</span>
+                        <span class="version-date">1. Mai 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>📄 PDF-Export & Didaktisches Reporting</h3>
+                        <ul>
+                            <li><strong>Optimierter FiBu-Export:</strong> Bilanz, T-Konten und Journal können nun über ein dezentes Icon direkt als druckoptimierte PDF exportiert werden.</li>
+                            <li><strong>Layout-Intelligenz:</strong> Automatisches einspaltiges Layout für T-Konten im Druck sowie intelligente Seitenumbrüche, die das Zerschneiden von Konten und Buchungssätzen verhindern.</li>
+                            <li><strong>Eindeutige Archivierung:</strong> Automatische Generierung von Dateinamen inklusive Zeitstempel (z. B. <code>Buchhaltungstrainer_2026-05-01_01-00</code>).</li>
+                            <li><strong>Journal-Transparenz:</strong> Einführung von Status-Flags im Journal. Es ist nun klar erkennbar, ob ein Buchungssatz im <em>Simulationsmodus</em> (direkt) oder im <em>Übungsmodus</em> (selbst gebildet) erstellt wurde.</li>
+                            <li><strong>Lösungs-Übernahme:</strong> Im Übungsmodus kann nach zwei Fehlversuchen die korrekte Lösung übernommen werden. Diese Buchungen werden im Journal speziell markiert (💡-Symbol).</li>
+                            <li><strong>Warenwirtschafts-Zentralisierung:</strong> Daten-Import und -Export wurden im Dashboard zentralisiert. Der Vertrieb behält einen spezialisierten XML-Import für neue Kundenaufträge.</li>
+                            <li><strong>Plausibilitäts-Check:</strong> Einführung von Höchstmengen beim Einkauf (z. B. max. 1.000 Stück), um unrealistische Transaktionen zu verhindern.</li>
+                            <li><strong>Produktions-Details:</strong> Bei der Fertigstellung von Produkten werden nun die konkreten Beträge direkt im Geschäftsvorfall angezeigt, um die Buchung zu erleichtern.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 1.3.0 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.3.0</span>
+                        <span class="version-date">29. April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>🎓 Interaktiver Übungsmodus & Mobile UI</h3>
+                        <ul>
+                            <li><strong>Übungsmodus (Warenwirtschaft):</strong> Einführung eines interaktiven Übungsmodus. Schüler müssen nun die Buchungssätze (Soll, Haben, Betrag) bei jedem simulierten Geschäftsvorfall selbst bilden.</li>
+                            <li><strong>Pädagogische Hilfefunktion:</strong> Das Buchungs-Modal bietet Hinweise auf die benötigten Kontoarten (z. B. "Aktives Bestandskonto"), ohne die genaue Lösung zu verraten.</li>
+                            <li><strong>Transaktions-Warteschlange & Rollback:</strong> Komplexe Aktionen mit mehreren Buchungssätzen (z. B. im Profi-Modus) werden asynchron in einer Warteschlange abgefragt. Bei Abbruch wird der gesamte Geschäftsvorfall sicher rückgängig gemacht (Rollback).</li>
+                            <li><strong>Touch-Optimierung:</strong> Das Drag-and-Drop-System in der Bilanz wurde für Android-Tablets und Windows-Touch-Geräte optimiert (<code>touch-action: none</code>).</li>
+                            <li><strong>Responsives Finetuning:</strong> Die Warenwirtschaft nutzt den Bildschirmrand auf Smartphones und Laptops nun exakt und durchgängig (konsistente Nutzung der Viewport-Höhe).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 1.2.0 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.2.0</span>
+                        <span class="version-date">27. April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>🏦 Finanzmanagement & Transparenz</h3>
+                        <ul>
+                            <li><strong>Granulare FiBu:</strong> Erweiterung der Finanzbuchhaltung um eine detaillierte "Finanzen"-Ansicht zur Verwaltung einzelner offener Posten.</li>
+                            <li><strong>Zielkauf & Zielverkauf:</strong> Materialbestellungen und Produktverkäufe können nun "Auf Ziel" verbucht werden, was automatisch Forderungen bzw. Verbindlichkeiten generiert.</li>
+                            <li><strong>Spezifische Zahlungen:</strong> Lieferanten- und Kundenrechnungen können in der Finanzen-Ansicht nun einzeln und sogar in Teilbeträgen per Bank oder Kasse beglichen werden.</li>
+                            <li><strong>Darlehens-Umschuldung:</strong> Möglichkeit, einzelne, kurzfristige Verbindlichkeiten direkt per Knopfdruck in langfristige Bankdarlehen umzuschulden.</li>
+                            <li><strong>Bilanz-Korrekturen:</strong> Bugfixes bezüglich der Vorzeichen-Logik von Passivkonten, um eine mathematisch konsistente und optisch fehlerfreie Bilanz (Soll = Haben) zu gewährleisten.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 1.1.1 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.1.1</span>
+                        <span class="version-date">27. April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>📊 Bilanz-Struktur & Liquidität</h3>
+                        <ul>
+                            <li><strong>Optimierte UV-Reihenfolge:</strong> Anpassung der Sortierung im Umlaufvermögen nach dem Liquiditätsprinzip (Vorräte &rarr; Forderungen &rarr; Flüssige Mittel).</li>
+                            <li><strong>Liquiditäts-Präzisierung:</strong> Tausch von Bankguthaben und Kasse, um die Kasse als liquidesten Posten korrekt am Ende der Aktiva zu führen.</li>
+                            <li><strong>Handelswaren:</strong> Integration der neuen Kategorie "Handelswaren" in die Inventar-Auswahl und Bilanz-Validierung.</li>
+                            <li><strong>Fachsprachliche Anpassung:</strong> Umbenennung von "Bank" zu "Bankguthaben" und Präzisierung der Forderungen ("Forderungen a. L. L.").</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 1.1.0 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.1.0</span>
+                        <span class="version-date">23. April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>🎓 Niveaustufen & System-Optimierung</h3>
+                        <ul>
+                            <li><strong>Buchführung mit Niveaustufen:</strong> Einführung von drei Schwierigkeitsgraden (Anfänger, Fortgeschritten, Profi) mit insgesamt 15 neuen Geschäftsfällen.</li>
+                            <li><strong>Zusammengesetzte Buchungssätze:</strong> Unterstützung für komplexe Buchungen (z.B. Einkauf/Verkauf mit Umsatzsteuer) inklusive erweiterter T-Konten-Vorschau im Pro-Modus.</li>
+                            <li><strong>Warenwirtschaft-Tuning:</strong> Präzisierung der Buchungslogik im Anfänger-Modus (Aktivtausch, Passivtausch, Bilanzveränderungen) und Behebung von Scroll-Sprüngen bei Aktionen.</li>
+                            <li><strong>Responsives Layout 2.0:</strong> Umfassende Optimierung für iPad (8. Gen) und Laptops (MacBook Air), um eine scrollfreie Simulation mit voller Sichtbarkeit aller Steuerelemente zu ermöglichen.</li>
+                            <li><strong>Daten-Konsistenz:</strong> Integration neuer Debitoren ("Forderungen aus L.L.") und Angleichung der Berechnungslogik zwischen Inventur, Inventar und Bilanz.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 1.0.0 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.1.0.0</span>
+                        <span class="version-date">22. April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>⚖️ Pädagogik & Industrieller Standard</h3>
+                        <ul>
+                            <li><strong>Industrie-Standard:</strong> Vollständige Umstellung der Simulation auf die <em>Fire Bike GmbH</em>.</li>
+                            <li><strong>Alphabetische Inventurliste:</strong> Zur Stärkung der individuellen Klassifizierung werden Positionen nun alphabetisch gemischt statt in thematischen Blöcken angezeigt.</li>
+                            <li><strong>Interaktives Live-Inventar:</strong> Das formale Inventar (Staffelform) baut sich nun automatisch bei jeder korrekten Zuordnung auf. Summen erscheinen erst nach erfolgreicher manueller Berechnung.</li>
+                            <li><strong>Material-Korrektur:</strong> Präzisierung der Werkstoff-Kategorien (z. B. Schrauben als Hilfsstoffe) gemäß industrieller Praxis.</li>
+                        </ul>
+
+                        <h3>🏗️ Warenwirtschaft & Robustheit</h3>
+                        <ul>
+                            <li><strong>Self-Healing Engine:</strong> Implementierung eines resilienten Ladesystems, das fehlerhafte lokale Daten automatisch erkennt und repariert.</li>
+                            <li><strong>Emergency Reset:</strong> Einführung eines Notfall-Buttons zur Wiederherstellung der Simulation bei schwerwiegenden Datenkonflikten.</li>
+                            <li><strong>Stabilitäts-Fixes:</strong> Bereinigung kritischer Fehler in der XML-Verarbeitung und der Initialisierungs-Logik.</li>
+                        </ul>
+
+                        <h3>📊 Didaktische Bilanzierung</h3>
+                        <ul>
+                            <li><strong>Interaktive Bilanz-Sortierung:</strong> Einführung von Drag-and-Drop in der Bilanz zur aktiven Einübung der Liquiditäts- und Fälligkeitsabfolge.</li>
+                        </ul>
+
+                        <h3>📖 Theorie-Erweiterung</h3>
+                        <ul>
+                            <li><strong>Neues Modul "Buchen":** Integration der Grundlagen zur doppelten Buchführung, Bestandskonten und Bilanzveränderungen.</li>
+                            <li><strong>Modernisiertes Layout:</strong> Optimierte Darstellung der Theorie-Karten für eine bessere Übersicht auf Desktop-Monitoren.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 0.8.0 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.0.8.0</span>
+                        <span class="version-date">20. April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>⚖️ Warenwirtschaft & Bilanzierung</h3>
+                        <ul>
+                            <li><strong>Erweitertes Anlagevermögen:</strong> Gebäude (0510), Fuhrpark (0840) und BGA (0860) wurden ergänzt und mit dediziertem Startkapital ausgestattet.</li>
+                            <li><strong>Didaktische Strukturierung:</strong> Strikte Unterteilung in Anlage-/Umlaufvermögen (nach Liquidierbarkeit) sowie Eigen-/Fremdkapital (nach Fälligkeit) im Bilanz-T-Konto.</li>
+                            <li><strong>Dynamisches Bilanz-Label:</strong> Die Bilanz im Dashboard passt ihren Titel nun dem Simulationsfortschritt an (Eröffnungsbilanz, Laufendes Geschäftsjahr, Schlussbilanz).</li>
+                            <li><strong>Vorläufiges Betriebsergebnis:</strong> Zur Vermeidung von Differenzen zwischen Aktiva und Passiva während des Jahres fließen noch nicht abgeschlossene Salden nun transparent als "Vorläufiges Ergebnis" in die Passivseite der Bilanz-Ansicht ein.</li>
+                            <li><strong>Jahresabschluss-Korrektur:</strong> Ein Bug wurde behoben, durch den Aufwendungen für Hilfsstoffe (6010) und Betriebsstoffe (6020) beim Jahresabschluss auf das GuV-Konto nicht berücksichtigt wurden.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 0.7.1 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.0.7.1</span>
+                        <span class="version-date">20. April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>📱 Mobile Optimierung & Fixes</h3>
+                        <ul>
+                            <li><strong>iPhone 13 Mini Support:</strong> Einführung responsiver Schriftgrößen via <code>clamp()</code> und flexiblerer Layouts für eine perfekte Darstellung auf kleinen Smartphone-Displays.</li>
+                            <li><strong>Sidebar-Fix:</strong> Behebung eines Fehlers, durch den die Seitenleiste auf Mobilgeräten teilweise nicht geschlossen werden konnte.</li>
+                            <li><strong>UI-Refining:</strong> Optimierung der KPI-Karten und Schwierigkeitsgrad-Buttons für bessere Lesbarkeit und Bedienbarkeit bei schmalen Viewports.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 0.7.0 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.0.7.0</span>
+                        <span class="version-date">20. April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>🏗️ Produktion & Werkstoffe</h3>
+                        <ul>
+                            <li><strong>Hilfs- & Betriebsstoffe (HS/BS):</strong> Vollständige Integration in den Produktionszyklus. Automatisierter Verbrauch beim Fertigstellen von Produkten.</li>
+                            <li><strong>Erfolgswirksame Buchung:</strong> Unterstützung für Aufwandsbuchungen beim Materialverbrauch (Konten 6010/6020) in höheren Schwierigkeitsgraden.</li>
+                            <li><strong>Bestandssicherung:</strong> Automatisierte Prüfung der Materialverfügbarkeit (HS/BS) inkl. Produktionssperre bei Fehlmengen.</li>
+                        </ul>
+                        
+                        <h3>🔧 Prozess-Optimierung & UI/UX</h3>
+                        <ul>
+                            <li><strong>Prozess-Navigation:</strong> Reorganisation der Registerkarten nach betriebswirtschaftlichem Ablauf (Beschaffung &rarr; Lager &rarr; Produktion &rarr; Vertrieb).</li>
+                            <li><strong>Sicherheits-Abfragen:</strong> Einführung einer zweistufigen Bestätigung beim Wechsel des Lern-Modus zur Vermeidung von Datenverlust.</li>
+                            <li><strong>Visuelle Verfeinerung:</strong> Hervorhebung des aktiven Lern-Modus und optimierte Ausrichtung der Seitenleisten-Links.</li>
+                            <li><strong>Notification-Tuning:</strong> Entfernung störender Animationen bei kritischen Beständen zugunsten einer klaren, statischen Farbkennzeichnung.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Version 0.6.0 -->
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.0.6.0</span>
+                        <span class="version-date">20. April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>📈 Vertrieb & Auftragswesen</h3>
+                        <ul>
+                            <li><strong>Vertriebs-Modul:</strong> Einführung eines dedizierten Bereichs für den Absatz von Fertigerzeugnissen.</li>
+                            <li><strong>Kundenaufträge:</strong> Dynamisches Auftragssystem sowie die Möglichkeit, eigene Aufträge manuell anzulegen.</li>
+                            <li><strong>Mengenstaffel:</strong> Implementierung von Rabatten (5% ab 2 Stk., 10% ab 5 Stk.) inkl. informativer Tooltips.</li>
+                            <li><strong>Globales Daten-Management:</strong> Verfügbarkeit von Speichern/Laden/Drag & Drop in jedem einzelnen Modul für einen unterbrechungsfreien Workflow.</li>
+                            <li><strong>Erweiterte XML-Schnittstelle:</strong> Unterstützung für Kundenaufträge und Erhalt des aktiven Reiters nach dem Import.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.0.5.0</span>
+                        <span class="version-date">20. April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <h3>✨ Neue Features & Simulation</h3>
+                        <ul>
+                            <li><strong>Warenwirtschaftssimulation (ERP-Simulator):</strong> Einführung eines kompletten Simulations-Moduls für Produktions- und Handelsbetriebe.</li>
+                            <li><strong>Interaktive T-Konten:</strong> Einführung visueller T-Konten für Bestandskonten und Erfolgskonten mit automatischer Saldenbildung.</li>
+                            <li><strong>Management-Dashboard:</strong> Grafische Übersicht über Liquidität, Bestände und Betriebsergebnis.</li>
+                            <li><strong>Erweiterte Theorie:</strong> Ausbau auf 6 Lernkapitel inkl. Buchführungsgrundlagen (Bilanz, Erfolgskonten, GuV).</li>
+                        </ul>
+                        
+                        <h3>🔧 Optimierungen & UI/UX</h3>
+                        <ul>
+                            <li><strong>Rebranding:</strong> Umstellung auf die neuen Firmenidentitäten <em>Fire Bike GmbH</em> und <em>FireComputer GmbH</em>.</li>
+                            <li><strong>Mobile-First Navigation:</strong> Neue Bottom-Navigation für die Simulation und optimierte Sidebar.</li>
+                            <li><strong>Responsive Layouts:</strong> Alle Module wurden für die nahtlose Nutzung auf Smartphones, Tablets und Desktops optimiert.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="changelog-version legacy">
+                    <div class="changelog-header">
+                        <span class="version-tag">v.0.2.0 - v.0.1.0</span>
+                        <span class="version-date">März - April 2026</span>
+                    </div>
+                    <div class="changelog-body">
+                        <ul>
+                            <li>Grundlagen-Module: Inventur, Inventar und Bilanz (Stationenlernen).</li>
+                            <li>Themen: Werkstoffe (Roh-, Hilfs-, Betriebsstoffe).</li>
+                            <li>Interaktive Timeline für Inventurverfahren.</li>
+                            <li>Dunkelmodus (Dark Mode) Support.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impressum Section -->
+        <section id="impressum-section" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Impressum</h2>
+            <div class="card" style="background: var(--card-bg); padding: 1.5rem; border-radius: 8px;">
+                <h3>Angaben gem&auml;&szlig; &sect; 5 TMG</h3>
+                <p>
+                    mrgoldsmitt<br>
+                    GitHub: <a href="https://github.com/mrgoldsmitt" target="_blank" rel="noopener noreferrer"
+                        style="color: var(--primary);">github.com/mrgoldsmitt</a>
+                </p>
+                <br>
+                <h3>Kontakt</h3>
+                <p>
+                    E-Mail: <a href="mailto:88801109+mrgoldsmitt@users.noreply.github.com"
+                        style="color: var(--primary);">88801109+mrgoldsmitt@users.noreply.github.com</a>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="drag-drop-touch.js"></script>
+    <script src="script.js?v=22"></script>
+    <script src="theorie.js?v=17"></script>
+    <script src="inventur.js?v=17"></script>
+    <script src="inventar.js?v=17"></script>
+    <script src="bilanz.js?v=18"></script>
+    <script src="buchfuehrung.js?v=19"></script>
+    <script src="stationenlernen.js?v=17"></script>
+    <script src="warenwirtschaft.js?v=19"></script>
+
+</body>
+
+</html>

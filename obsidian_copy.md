@@ -12,7 +12,7 @@ tags:
   - domain/finance
   - domain/accounting
 type: application-architecture
-version: "0.2.5"
+version: "0.2.6"
 license: "CC BY-NC 4.0"
 status: production-ready
 stack:
@@ -23,7 +23,7 @@ stack:
   responsive: "Fluid Responsive Design (iPhone 13 Mini, iPad, Desktop)"
 repository_path: "https://github.com/mrgoldsmitt/Buchhaltungstrainer"
 created_date: 2026-03-20
-last_updated: 2026-10-17
+last_updated: 2026-10-23
 ---
 
 # 📖 Buchhaltungstrainer: Technische Gesamtdokumentation
@@ -223,6 +223,16 @@ Alternativ kann das im Repository enthaltene Skript `start-server.command` per D
 ---
 
 ## 7. Versionshistorie & Changelog
+
+### v0.2.6 (23.10.2026)
+* **Creative Commons Lizenzierung (CC BY-NC 4.0)**:
+  * Vollständige Umstellung auf die CC BY-NC 4.0-Lizenz (Namensnennung - Nicht-kommerziell).
+  * Einbindung des offiziellen CC-Badges und klar verständlicher Lizenzbedingungen im Impressum der Webanwendung sowie im Sidebar-Footer.
+* **Public GitHub Release & Datenschutz-Härtung**:
+  * Bereinigung und Veröffentlichung als öffentliches Open-Source-Repository auf GitHub (`mrgoldsmitt/Buchhaltungstrainer`).
+  * Vollständige Anonymisierung lokaler Entwicklerpfade, interner Ordner und privater E-Mail-Adressen.
+  * Bereitstellung von `deploy_release.sh` zur automatisierten Paketierung von Offline-ZIP-Distributionsarchiven und GitHub Releases.
+  * Bereitstellung eines umfassenden `README.md` mit Facharchitektur, Modulübersicht und Schnellstartanleitung.
 
 ### v0.2.5 (17.10.2026)
 * **Neues Theme: Pro (Enterprise Edition)**:

@@ -1,6 +1,6 @@
 # 📊 Buchhaltungstrainer & ERP-Simulator
 
-[![Version](https://img.shields.io/badge/version-0.2.5-blue.svg)](https://github.com/mrgoldsmitt/Buchhaltungstrainer/releases)
+[![Version](https://img.shields.io/badge/version-0.2.6-blue.svg)](https://github.com/mrgoldsmitt/Buchhaltungstrainer/releases)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Platform](https://img.shields.io/badge/platform-Web%20SPA-brightgreen.svg)]()
 [![No Backend](https://img.shields.io/badge/backend-None%20(Pure%20Client--Side)-orange.svg)]()

@@ -1,7 +1,7 @@
 # 📊 Buchhaltungstrainer & ERP-Simulator
 
 [![Version](https://img.shields.io/badge/version-0.2.5-blue.svg)](https://github.com/mrgoldsmitt/Buchhaltungstrainer/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Platform](https://img.shields.io/badge/platform-Web%20SPA-brightgreen.svg)]()
 [![No Backend](https://img.shields.io/badge/backend-None%20(Pure%20Client--Side)-orange.svg)]()
 
@@ -148,6 +148,13 @@ Mit dem mitgelieferten Skript `deploy_release.sh` kann ein eigenständiges Distr
 
 ## 📄 Lizenz
 
-Dieses Projekt ist unter der [MIT License](LICENSE) lizenziert.
+Dieses Werk bzw. der Buchhaltungstrainer ist unter der [Creative Commons Namensnennung - Nicht-kommerziell 4.0 International Lizenz (CC BY-NC 4.0)](LICENSE) lizenziert.
 
-Entwickelt von [@mrgoldsmitt](https://github.com/mrgoldsmitt).
+* **Sie dürfen:** Das Projekt frei kopieren, weiterverbreiten und in jedwedem Format oder Medium nutzen.
+* **Bedingungen:** 
+  1. **Namensnennung (Attribution / BY):** Sie müssen angemessene Urheberangaben machen ([@mrgoldsmitt](https://github.com/mrgoldsmitt)), einen Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden.
+  2. **Nicht-kommerziell (NonCommercial / NC):** Sie dürfen das Material **nicht für kommerzielle Zwecke** verwenden.
+
+Vollständiger Lizenztext: Siehe [`LICENSE`](LICENSE) oder online bei [Creative Commons](https://creativecommons.org/licenses/by-nc/4.0/deed.de).
+
+Urheber & Entwickler: [@mrgoldsmitt](https://github.com/mrgoldsmitt).

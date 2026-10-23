@@ -13,6 +13,7 @@ tags:
   - domain/accounting
 type: application-architecture
 version: "0.2.5"
+license: "CC BY-NC 4.0"
 status: production-ready
 stack:
   frontend: "Vanilla HTML5, Modern CSS3 (CSS Variables, Flexbox, CSS Grid), Vanilla JavaScript (ES6+)"

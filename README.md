@@ -157,4 +157,4 @@ Dieses Werk bzw. der Buchhaltungstrainer ist unter der [Creative Commons Namensn
 
 Vollständiger Lizenztext: Siehe [`LICENSE`](LICENSE) oder online bei [Creative Commons](https://creativecommons.org/licenses/by-nc/4.0/deed.de).
 
-Urheber & Entwickler: [@mrgoldsmitt](https://github.com/mrgoldsmitt).
+Urheber & Entwickler: [@mrgoldsmitt](https://github.com/mrgoldsmitt) ([mrgoldsmitt.work](https://mrgoldsmitt.work)).

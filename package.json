@@ -1,6 +1,6 @@
 {
   "name": "buchhaltungstrainer",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Interaktiver Buchhaltungstrainer & ERP-Simulator (Inventur, Inventar, Bilanz, Buchführung, Warenwirtschaft)",
   "main": "script.js",
   "scripts": {

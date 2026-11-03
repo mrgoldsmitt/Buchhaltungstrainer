@@ -1,6 +1,6 @@
 # 📊 Buchhaltungstrainer & ERP-Simulator
 
-[![Version](https://img.shields.io/badge/version-0.2.6-blue.svg)](https://github.com/mrgoldsmitt/Buchhaltungstrainer/releases)
+[![Version](https://img.shields.io/badge/version-0.2.7-blue.svg)](https://github.com/mrgoldsmitt/Buchhaltungstrainer/releases)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Platform](https://img.shields.io/badge/platform-Web%20SPA-brightgreen.svg)]()
 [![No Backend](https://img.shields.io/badge/backend-None%20(Pure%20Client--Side)-orange.svg)]()
@@ -19,6 +19,7 @@ Das didaktische Konzept basiert auf dem Modellunternehmen **Fire Bike GmbH** (mi
 * Kompaktes Nachschlagewerk zu den Grundsätzen ordnungsmäßiger Buchführung (GoB).
 * Übersichtlicher Industriekontenrahmen (IKR).
 * Erklärungen zu Bestands- und Erfolgskonten, Vorsteuer/Umsatzsteuer sowie Abschreibungen (AfA).
+* **Bestandsveränderungen & Gesamtleistung**: Systematische Buchung von Bestandsmehrungen und Bestandsminderungen an fertigen und unfertigen Erzeugnissen (Konten 2800/2100 und 5200) inklusive interaktivem Live-Rechner und Auswirkung auf die Gesamtleistung in der GuV (§ 275 Abs. 2 HGB).
 
 ### 2. 📦 Inventur (Lagererfassung)
 * Physische Bestandserfassung im Lager der *Fire Bike GmbH*.

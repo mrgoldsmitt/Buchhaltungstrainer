@@ -12,7 +12,7 @@ tags:
   - domain/finance
   - domain/accounting
 type: application-architecture
-version: "0.2.6"
+version: "0.2.7"
 license: "CC BY-NC 4.0"
 status: production-ready
 stack:
@@ -23,7 +23,7 @@ stack:
   responsive: "Fluid Responsive Design (iPhone 13 Mini, iPad, Desktop)"
 repository_path: "https://github.com/mrgoldsmitt/Buchhaltungstrainer"
 created_date: 2026-03-20
-last_updated: 2026-10-23
+last_updated: 2026-11-03
 ---
 
 # 📖 Buchhaltungstrainer: Technische Gesamtdokumentation
@@ -144,11 +144,13 @@ Die Plattform verfügt über ein flexibles, in `style.css` verankertes Theme-Sys
 ## 4. Fachmodule im Detail
 
 ### 4.1 Theorie (`theorie.js`)
-* Interaktive Theorie-Karten zu den Grundlagen des Rechnungswesens:
+* Interaktive Theorie-Karten zu den Grundlagen des Rechnungswesens (8 Themenbereiche):
   * Aufgaben der Buchführung, gesetzliche Grundlagen (HGB).
   * Inventur, Inventar und Aufbau der Bilanz (Aktiva vs. Passiva).
   * Unterscheidung von Bestands- und Erfolgskonten.
   * Grundsatz „Soll an Haben“ und Bildung einfacher/zusammengesetzter Buchungssätze.
+  * Werkstoffarten (Roh-, Hilfs- und Betriebsstoffe).
+  * **Bestandsveränderungen & Gesamtleistung**: Systematische didaktische Erfassung von Bestandsmehrung und Bestandsminderung an fertigen und unfertigen Erzeugnissen (2800 FE / 2100 UE und 5200 BV), interaktiver Simulator/Rechner und Auswirkung auf die Gesamtleistung in der GuV (§ 275 Abs. 2 HGB).
 
 ### 4.2 Stationenlernen (`stationenlernen.js`)
 * Strukturierter Lernpfad mit thematischen Stationen und steigendem Schwierigkeitsgrad (Anforderungsbereiche I bis III).
@@ -223,6 +225,14 @@ Alternativ kann das im Repository enthaltene Skript `start-server.command` per D
 ---
 
 ## 7. Versionshistorie & Changelog
+
+### v0.2.7 (03.11.2026)
+* **Theorie-Modul: Bestandsveränderungen & Gesamtleistung**:
+  * Einführung des neuen interaktiven Theorie-Kapitels **„8. Bestandsveränderungen“** in `theorie.js`.
+  * Systematische Gegenüberstellung von Bestandsmehrung (Produktion > Absatz, Ertragscharakter, Haben-Buchung auf 5200) und Bestandsminderung (Produktion < Absatz, Aufwandscharakter, Soll-Buchung auf 5200).
+  * Integrierter **interaktiver Simulator/Rechner**: Ermöglicht Schülerinnen und Schülern das Testen typischer Praxisszenarios der Fire Bike GmbH oder das Eingeben individueller Bestandszahlen inklusive Live-Berechnung von Buchungssätzen, T-Konten und Gesamtleistung nach dem Gesamtkostenverfahren (§ 275 Abs. 2 HGB).
+  * Prägnante didaktische Merkregeln („M“-Regel) und didaktische Betonung des strengen Herstellungskostenprinzips.
+  * Versions- und Cache-Busting-Aktualisierung (`theorie.js?v=18`, Versionsanzeige in Header und Seitenleiste auf `v.0.2.7`).
 
 ### v0.2.6 (23.10.2026)
 * **Creative Commons Lizenzierung (CC BY-NC 4.0)**:

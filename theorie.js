@@ -15,6 +15,7 @@ function renderTheorie() {
             <button class="theory-tab-btn" onclick="switchTheoryTab('guv')">5. GuV</button>
             <button class="theory-tab-btn" onclick="switchTheoryTab('werkstoffe')">6. Werkstoffe</button>
             <button class="theory-tab-btn" onclick="switchTheoryTab('buchen')">7. Buchen</button>
+            <button class="theory-tab-btn" onclick="switchTheoryTab('bestandsveraenderung')">8. Bestandsveränderungen</button>
         </div>
         <div id="theory-content" class="theory-content-area">
             <!-- Content injected here -->
@@ -49,6 +50,9 @@ function switchTheoryTab(tab) {
         contentArea.innerHTML = getWerkstoffeTheoryHTML();
     } else if (tab === 'buchen') {
         contentArea.innerHTML = getBuchenTheoryHTML();
+    } else if (tab === 'bestandsveraenderung') {
+        contentArea.innerHTML = getBestandsveraenderungTheoryHTML();
+        setTimeout(() => updateBVCalculator(), 50);
     }
 }
 
@@ -499,4 +503,362 @@ function getBuchenTheoryHTML() {
             '<strong>Der Buchungssatz-Mantel:</strong> Jede Buchung folgt dem Schema <strong>„Soll an Haben“</strong>. Zuerst nennst du das Konto, auf dem im Soll gebucht wird, dann das Wörtchen „an“, und dann das Konto für die Haben-Buchung.' +
         '</div>' +
     '</div>';
+}
+
+
+function getBestandsveraenderungTheoryHTML() {
+    return '<div class="theory-box">' +
+        '<h3>Was sind Bestandsveränderungen?</h3>' +
+        '<p>In einem Industrie- und Fertigungsbetrieb wie der <strong>Fire Bike GmbH</strong> stimmen die in einem Geschäftsjahr <strong>produzierten</strong> Fahrräder und die <strong>tatsächlich abgesetzten (verkauften)</strong> Fahrräder fast nie exakt überein.</p>' +
+        
+        '<div class="two-column-grid" style="margin-top: 1rem;">' +
+            '<div class="werkstoff-card" style="border-left: 5px solid #10b981; text-align: left;">' +
+                '<div class="werkstoff-icon">📦⬆️</div>' +
+                '<h4 style="color:#10b981;">Fall 1: Es wird mehr produziert als verkauft</h4>' +
+                '<p class="werkstoff-def">Die überschüssig produzierten Fahrräder werden nicht weggeworfen, sondern in das Fertiglager gestellt. Der Lagerbestand an fertigen Erzeugnissen <strong>steigt</strong>.</p>' +
+                '<div class="werkstoff-merkmal" style="color:#10b981;"><strong>Folge:</strong> Bestandsmehrung (Produktion > Absatz)</div>' +
+                '<div class="example-box" style="margin-top: 0.75rem; font-size: 0.85rem;">' +
+                    '<strong>Beispiel:</strong> Produktion 1.000 Bikes, Verkauf 800 Bikes<br>' +
+                    '➔ <strong>200 Fahrräder wandern ins Lager (Bestandsmehrung)</strong>.' +
+                '</div>' +
+            '</div>' +
+
+            '<div class="werkstoff-card" style="border-left: 5px solid #ef4444; text-align: left;">' +
+                '<div class="werkstoff-icon">📦⬇️</div>' +
+                '<h4 style="color:#ef4444;">Fall 2: Es wird mehr verkauft als produziert</h4>' +
+                '<p class="werkstoff-def">Die Kundennachfrage ist höher als die laufende Fertigung. Um alle Aufträge zu erfüllen, werden fertige Fahrräder aus dem Lagerbestand des Vorjahres entnommen. Der Lagerbestand <strong>sinkt</strong>.</p>' +
+                '<div class="werkstoff-merkmal" style="color:#ef4444;"><strong>Folge:</strong> Bestandsminderung (Produktion < Absatz)</div>' +
+                '<div class="example-box" style="margin-top: 0.75rem; font-size: 0.85rem;">' +
+                    '<strong>Beispiel:</strong> Produktion 800 Bikes, Verkauf 1.000 Bikes<br>' +
+                    '➔ <strong>200 Fahrräder aus dem Vorjahr verkauft (Bestandsminderung)</strong>.' +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+
+        '<div class="formula-box" style="margin-top: 1.5rem; text-align: left; background: rgba(0, 134, 203, 0.08);">' +
+            '<strong>Die Grundformel am Bilanzstichtag (31.12.):</strong><br>' +
+            '<div style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: var(--fly-blue, #0070f2); margin: 0.5rem 0;">' +
+                'Bestandsveränderung (&Delta;B) = Schlussbestand (SB) &minus; Anfangsbestand (AB)' +
+            '</div>' +
+            '<div style="font-size: 0.9rem; color: var(--text-muted);">' +
+                '• <strong>SB &gt; AB:</strong> Bestandsmehrung (positives Vorzeichen &plus;, Ertragscharakter)<br>' +
+                '• <strong>SB &lt; AB:</strong> Bestandsminderung (negatives Vorzeichen &minus;, Aufwandscharakter)' +
+            '</div>' +
+        '</div>' +
+
+        '<h3 style="margin-top: 2rem;">Warum müssen Bestandsveränderungen gebucht werden?</h3>' +
+        '<p>Das Handelsgesetzbuch (§ 252 Abs. 1 Nr. 5 HGB) schreibt den <strong>Grundsatz der Periodenabgrenzung (Periodengerechtigkeit)</strong> vor: Aufwendungen und Erträge müssen genau dem Geschäftsjahr zugeordnet werden, in dem sie verursacht wurden – unabhängig davon, wann Geld fließt.</p>' +
+
+        '<div class="layer-card" style="margin-top: 1rem;">' +
+            '<div class="layer-content" style="gap: 1.5rem; text-align: left;">' +
+                '<div>' +
+                    '<strong style="color: #10b981; font-size: 1.05rem;">1. Das Problem bei Bestandsmehrungen:</strong><br>' +
+                    'Wenn die Fire Bike GmbH 200 Fahrräder auf Lager baut, wurden dafür bereits Rohstoffe (Rahmen, Reifen), Löhne und Strom verbraucht. Diese Kosten stehen als <strong>Aufwand</strong> in der GuV. Weil die Räder aber noch im Lager stehen, gibt es dafür <strong>noch keine Umsatzerlöse</strong>.<br>' +
+                    '<em>Folge ohne Korrektur:</em> Der Jahresgewinn wäre viel zu niedrig ausgewiesen!<br>' +
+                    '<em>Kaufmännische Lösung:</em> Die Bestandsmehrung wird als <strong>Ertrag</strong> eingebucht. Dadurch wird der Herstellungsaufwand neutralisiert und der Wertzuwachs im Lager korrekt abgebildet.' +
+                '</div>' +
+                '<div>' +
+                    '<strong style="color: #ef4444; font-size: 1.05rem;">2. Das Problem bei Bestandsminderungen:</strong><br>' +
+                    'Wenn Fahrräder aus dem Vorjahresbestand verkauft werden, fließen hohe <strong>Umsatzerlöse</strong> in die Kasse oder auf das Bankkonto. Der Herstellungsaufwand für diese Fahrräder wurde jedoch bereits im letzten Jahr bezahlt und verbucht.<br>' +
+                    '<em>Folge ohne Korrektur:</em> Der Gewinn im aktuellen Jahr wäre unberechtigt hoch, weil den Erlösen keine Produktionskosten gegenüberstehen!<br>' +
+                    '<em>Kaufmännische Lösung:</em> Die Bestandsminderung wird wie ein <strong>Aufwand</strong> (Ertragsminderung) erfasst. Dadurch wird der Periodengewinn um die Herstellkosten der verkauften Vorjahresware bereinigt.' +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+
+        '<h3 style="margin-top: 2rem;">Die Buchungssätze & das Konto 5200</h3>' +
+        '<p>In der industriellen Buchführung (IKR) nutzen wir das aktive Bestandskonto <strong>2800 Fertigerzeugnisse (FE)</strong> sowie das Erfolgskonto <strong>5200 Bestandsveränderung FE</strong> (bzw. 2100 / 5200 für unfertige Erzeugnisse):</p>' +
+
+        '<div class="two-column-grid">' +
+            '<div class="werkstoff-card" style="border-top: 4px solid #10b981; text-align: left;">' +
+                '<h4 style="color:#10b981;">📈 Buchungssatz: Bestandsmehrung</h4>' +
+                '<div style="background: rgba(0,0,0,0.06); padding: 0.75rem; border-radius: 6px; font-family: monospace; font-size: 0.95rem; margin: 0.75rem 0;">' +
+                    '<strong>2800 FE &nbsp;an&nbsp; 5200 Bestandsveränderung FE</strong>' +
+                '</div>' +
+                '<ul style="font-size: 0.85rem; line-height: 1.5; padding-left: 1.2rem; color: var(--text-muted);">' +
+                    '<li><strong>2800 FE (Aktivkonto):</strong> Buchung im <strong>Soll</strong> (+) &rarr; das Lagervermögen steigt.</li>' +
+                    '<li><strong>5200 BV (Erfolgskonto):</strong> Buchung im <strong>Haben</strong> (+) &rarr; Ertrag für die Gesamtleistung.</li>' +
+                '</ul>' +
+            '</div>' +
+
+            '<div class="werkstoff-card" style="border-top: 4px solid #ef4444; text-align: left;">' +
+                '<h4 style="color:#ef4444;">📉 Buchungssatz: Bestandsminderung</h4>' +
+                '<div style="background: rgba(0,0,0,0.06); padding: 0.75rem; border-radius: 6px; font-family: monospace; font-size: 0.95rem; margin: 0.75rem 0;">' +
+                    '<strong>5200 Bestandsveränderung FE &nbsp;an&nbsp; 2800 FE</strong>' +
+                '</div>' +
+                '<ul style="font-size: 0.85rem; line-height: 1.5; padding-left: 1.2rem; color: var(--text-muted);">' +
+                    '<li><strong>5200 BV (Erfolgskonto):</strong> Buchung im <strong>Soll</strong> (&minus;) &rarr; Aufwandswirkung / Ertragsminderung.</li>' +
+                    '<li><strong>2800 FE (Aktivkonto):</strong> Buchung im <strong>Haben</strong> (&minus;) &rarr; das Lagervermögen sinkt.</li>' +
+                '</ul>' +
+            '</div>' +
+        '</div>' +
+
+        '<div class="example-box" style="margin-top: 1.5rem;">' +
+            '<strong>⚠️ Wichtigste Prüfungsregel:</strong> Bestandsveränderungen werden immer zu <strong>Herstellungskosten (HK)</strong> bewertet, <u>niemals</u> zu Verkaufspreisen! Der Gewinnaufschlag entsteht erst im Moment des tatsächlichen Verkaufs über die Umsatzerlöse.' +
+        '</div>' +
+
+        '<h3 style="margin-top: 2rem;">Auswirkung auf die GuV: Die Gesamtleistung</h3>' +
+        '<p>Nach dem handelsrechtlichen <strong>Gesamtkostenverfahren (§ 275 Abs. 2 HGB)</strong> wird in der Gewinn- und Verlustrechnung nicht nur der reine Umsatz betrachtet, sondern die <strong>Gesamtleistung</strong> der Periode ermittelt:</p>' +
+
+        '<div class="formula-box" style="text-align: left; background: var(--card-bg); border: 1px solid var(--card-border);">' +
+            '<div style="font-family: monospace; font-size: 0.95rem; line-height: 1.8;">' +
+                '&nbsp;&nbsp;&nbsp; Umsatzerlöse für Fertigerzeugnisse (Konto 5000)<br>' +
+                '<span style="color: #10b981;"><strong>+</strong> Bestandsmehrung an Erzeugnissen (Konto 5200)</span><br>' +
+                '<span style="color: #ef4444;"><strong>&minus;</strong> Bestandsminderung an Erzeugnissen (Konto 5200)</span><br>' +
+                '<hr style="border: 0; border-top: 1px solid var(--card-border); margin: 0.5rem 0;">' +
+                '<strong style="color: var(--fly-blue, #0070f2);">= GESAMTLEISTUNG DES UNTERNEHMENS</strong><br>' +
+                '&minus; Materialaufwand (Roh-, Hilfs-, Betriebsstoffe: Konten 6000-6020)<br>' +
+                '&minus; Personalaufwand (Löhne & Gehälter: Konten 6200-6300)<br>' +
+                '&minus; Abschreibungen auf Sachanlagen (AfA: Konto 6520)<br>' +
+                '&minus; Sonstige betriebliche Aufwendungen<br>' +
+                '<hr style="border: 0; border-top: 2px solid var(--fly-blue, #0070f2); margin: 0.5rem 0;">' +
+                '<strong style="color: #10b981;">= BETRIEBSERGEBNIS (Jahresüberschuss / Gewinn)</strong>' +
+            '</div>' +
+        '</div>' +
+
+        '<h3 style="margin-top: 2rem;">🧮 Interaktiver Bestandsveränderungs-Rechner</h3>' +
+        '<p>Wähle ein typisches Praxisszenario der Fire Bike GmbH oder gib eigene Bestandszahlen ein, um Buchungssatz, T-Konten und Gesamtleistung live zu berechnen:</p>' +
+
+        '<div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 1.25rem; margin-top: 1rem;">' +
+            '<div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">' +
+                '<button type="button" class="btn-primary active" onclick="setBVScenario(\'mehrung\')" style="font-size: 0.85rem; padding: 0.4rem 0.8rem; cursor: pointer;">Szenario A: Bestandsmehrung (Produktionsüberschuss)</button>' +
+                '<button type="button" class="btn-primary" onclick="setBVScenario(\'minderung\')" style="font-size: 0.85rem; padding: 0.4rem 0.8rem; cursor: pointer;">Szenario B: Bestandsminderung (Lagerabverkauf)</button>' +
+                '<button type="button" class="btn-primary" onclick="setBVScenario(\'neutral\')" style="font-size: 0.85rem; padding: 0.4rem 0.8rem; cursor: pointer;">Szenario C: Ausgeglichen (SB = AB)</button>' +
+            '</div>' +
+
+            '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">' +
+                '<div>' +
+                    '<label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Anfangsbestand (AB):</label>' +
+                    '<div style="display: flex; align-items: center; gap: 0.5rem;">' +
+                        '<input type="number" id="bv-calc-ab" value="50" min="0" oninput="updateBVCalculator()" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--card-border); background: var(--bg-color); color: var(--text);">' +
+                        '<span style="font-size: 0.85rem; color: var(--text-muted); white-space: nowrap;">Bikes</span>' +
+                    '</div>' +
+                '</div>' +
+
+                '<div>' +
+                    '<label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Schlussbestand lt. Inventur (SB):</label>' +
+                    '<div style="display: flex; align-items: center; gap: 0.5rem;">' +
+                        '<input type="number" id="bv-calc-sb" value="120" min="0" oninput="updateBVCalculator()" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--card-border); background: var(--bg-color); color: var(--text);">' +
+                        '<span style="font-size: 0.85rem; color: var(--text-muted); white-space: nowrap;">Bikes</span>' +
+                    '</div>' +
+                '</div>' +
+
+                '<div>' +
+                    '<label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Herstellkosten (HK) je Bike:</label>' +
+                    '<div style="display: flex; align-items: center; gap: 0.5rem;">' +
+                        '<input type="number" id="bv-calc-hk" value="400" min="1" oninput="updateBVCalculator()" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--card-border); background: var(--bg-color); color: var(--text);">' +
+                        '<span style="font-size: 0.85rem; color: var(--text-muted);">&euro;</span>' +
+                    '</div>' +
+                '</div>' +
+
+                '<div>' +
+                    '<label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Umsatzerlöse der Periode (5000):</label>' +
+                    '<div style="display: flex; align-items: center; gap: 0.5rem;">' +
+                        '<input type="number" id="bv-calc-ueb" value="250000" min="0" step="1000" oninput="updateBVCalculator()" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--card-border); background: var(--bg-color); color: var(--text);">' +
+                        '<span style="font-size: 0.85rem; color: var(--text-muted);">&euro;</span>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+
+            '<div id="bv-calc-result" style="margin-top: 1.25rem; border-top: 1px solid var(--card-border); padding-top: 1rem;">' +
+                '<!-- Injected by updateBVCalculator -->' +
+            '</div>' +
+        '</div>' +
+
+        '<h3 style="margin-top: 2rem;">💡 Didaktische Merkregeln für Ausbildung & Prüfung</h3>' +
+        '<div class="layer-card">' +
+            '<div class="layer-content" style="gap: 1rem; text-align: left;">' +
+                '<div><strong>1. Die „M“-Regel:</strong> <strong>M</strong>ehrung = <strong>M</strong>ehr Ertrag = Buchung im <strong>Haben</strong> auf 5200.</div>' +
+                '<div><strong>2. Die Gegenregel:</strong> <strong>M</strong>inderung = <strong>M</strong>inderertrag (Aufwand) = Buchung im <strong>Soll</strong> auf 5200.</div>' +
+                '<div><strong>3. Unfertige Erzeugnisse (2100 UE):</strong> Für noch in der Fertigung befindliche Produkte gilt exakt dasselbe Prinzip wie für fertige Erzeugnisse (2800 FE)!</div>' +
+                '<div><strong>4. Strenges Anschaffungswertprinzip:</strong> Bestandsveränderungen werden immer zu <strong>Herstellungskosten (HK)</strong> bewertet, nie zum Markt- oder Verkaufspreis!</div>' +
+            '</div>' +
+        '</div>' +
+    '</div>';
+}
+
+function setBVScenario(type) {
+    const abInput = document.getElementById('bv-calc-ab');
+    const sbInput = document.getElementById('bv-calc-sb');
+    const hkInput = document.getElementById('bv-calc-hk');
+    const uebInput = document.getElementById('bv-calc-ueb');
+    if (!abInput || !sbInput || !hkInput || !uebInput) return;
+
+    if (type === 'mehrung') {
+        abInput.value = 50;
+        sbInput.value = 120;
+        hkInput.value = 400;
+        uebInput.value = 250000;
+    } else if (type === 'minderung') {
+        abInput.value = 150;
+        sbInput.value = 60;
+        hkInput.value = 400;
+        uebInput.value = 320000;
+    } else if (type === 'neutral') {
+        abInput.value = 100;
+        sbInput.value = 100;
+        hkInput.value = 400;
+        uebInput.value = 280000;
+    }
+
+    // Update active class on buttons
+    const btns = document.querySelectorAll('#theory-content .btn-primary');
+    btns.forEach(btn => {
+        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(type)) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    updateBVCalculator();
+}
+
+function updateBVCalculator() {
+    const abInput = document.getElementById('bv-calc-ab');
+    const sbInput = document.getElementById('bv-calc-sb');
+    const hkInput = document.getElementById('bv-calc-hk');
+    const uebInput = document.getElementById('bv-calc-ueb');
+    const resultBox = document.getElementById('bv-calc-result');
+    if (!abInput || !sbInput || !hkInput || !uebInput || !resultBox) return;
+
+    const abQty = parseFloat(abInput.value) || 0;
+    const sbQty = parseFloat(sbInput.value) || 0;
+    const hk = parseFloat(hkInput.value) || 0;
+    const ueb = parseFloat(uebInput.value) || 0;
+
+    const abEuro = abQty * hk;
+    const sbEuro = sbQty * hk;
+    const diffQty = sbQty - abQty;
+    const diffEuro = diffQty * hk;
+    const gesamtleistung = ueb + diffEuro;
+
+    const formatCurrency = (num) => {
+        return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    };
+
+    let statusBadge = '';
+    let buchungssatzBox = '';
+    let tkontenHtml = '';
+    let guvCalcHtml = '';
+
+    if (diffQty > 0) {
+        statusBadge = '<span style="display:inline-block; padding: 4px 14px; border-radius: 999px; background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 700; font-size: 0.95rem;">📈 Bestandsmehrung: +' + diffQty + ' Fahrräder (+' + formatCurrency(diffEuro) + ')</span>';
+        
+        buchungssatzBox = 
+            '<div style="background: rgba(16, 185, 129, 0.08); border-left: 4px solid #10b981; padding: 0.75rem 1rem; border-radius: 6px; margin: 0.75rem 0;">' +
+                '<div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;"><strong>Buchungssatz am Geschäftsjahresende:</strong></div>' +
+                '<div style="font-family: monospace; font-size: 1.05rem; font-weight: 700; color: var(--text);">' +
+                    '2800 Fertigerzeugnisse (FE) ' + formatCurrency(diffEuro) + '<br>' +
+                    '<span style="margin-left: 2rem;">an 5200 Bestandsveränderung FE ' + formatCurrency(diffEuro) + '</span>' +
+                '</div>' +
+                '<div style="font-size: 0.85rem; color: #10b981; margin-top: 0.35rem;">' +
+                    '✔ Aktivkonto 2800 FE im <strong>Soll</strong> vermehrt (+) &nbsp;|&nbsp; Erfolgskonto 5200 BV im <strong>Haben</strong> als Ertrag gebucht (+)' +
+                '</div>' +
+            '</div>';
+
+        tkontenHtml = 
+            '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">' +
+                '<div style="border: 1px solid var(--card-border); border-radius: 6px; padding: 0.5rem; background: var(--bg-color);">' +
+                    '<div style="text-align: center; font-weight: 700; border-bottom: 2px solid var(--text); padding-bottom: 0.25rem;">Soll &nbsp; 2800 Fertigerzeugnisse (FE) &nbsp; Haben</div>' +
+                    '<div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 0.85rem; padding: 0.5rem 0;">' +
+                        '<div>AB: ' + formatCurrency(abEuro) + '<br><span style="color:#10b981; font-weight:700;">+ BV: ' + formatCurrency(diffEuro) + '</span></div>' +
+                        '<div style="text-align: right; color: var(--text-muted);">SB: ' + formatCurrency(sbEuro) + '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div style="border: 1px solid var(--card-border); border-radius: 6px; padding: 0.5rem; background: var(--bg-color);">' +
+                    '<div style="text-align: center; font-weight: 700; border-bottom: 2px solid var(--text); padding-bottom: 0.25rem;">Soll &nbsp; 5200 Bestandsveränderung FE &nbsp; Haben</div>' +
+                    '<div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 0.85rem; padding: 0.5rem 0;">' +
+                        '<div>Saldo (an 8020 GuV):<br><span style="color:#10b981; font-weight:700;">' + formatCurrency(diffEuro) + '</span></div>' +
+                        '<div style="text-align: right;"><span style="color:#10b981; font-weight:700;">2800 FE: ' + formatCurrency(diffEuro) + '</span></div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+
+        guvCalcHtml = 
+            '<div style="background: rgba(0, 134, 203, 0.06); border: 1px solid rgba(0, 134, 203, 0.2); border-radius: 6px; padding: 0.75rem 1rem; margin-top: 1rem; font-family: monospace; font-size: 0.95rem;">' +
+                '<div>&nbsp;&nbsp; Umsatzerlöse (5000): &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + formatCurrency(ueb) + '</div>' +
+                '<div style="color: #10b981; font-weight: 700;">+ Bestandsmehrung FE (5200): &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+' + formatCurrency(diffEuro) + '</div>' +
+                '<div style="border-top: 2px solid var(--fly-blue, #0070f2); margin-top: 0.35rem; padding-top: 0.35rem; font-weight: 800; color: var(--fly-blue, #0070f2);">' +
+                    '= GESAMTLEISTUNG DER PERIODE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + formatCurrency(gesamtleistung) +
+                '</div>' +
+            '</div>';
+
+    } else if (diffQty < 0) {
+        const absQty = Math.abs(diffQty);
+        const absEuro = Math.abs(diffEuro);
+
+        statusBadge = '<span style="display:inline-block; padding: 4px 14px; border-radius: 999px; background: rgba(239, 68, 68, 0.2); color: #ef4444; font-weight: 700; font-size: 0.95rem;">📉 Bestandsminderung: &minus;' + absQty + ' Fahrräder (&minus;' + formatCurrency(absEuro) + ')</span>';
+
+        buchungssatzBox = 
+            '<div style="background: rgba(239, 68, 68, 0.08); border-left: 4px solid #ef4444; padding: 0.75rem 1rem; border-radius: 6px; margin: 0.75rem 0;">' +
+                '<div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;"><strong>Buchungssatz am Geschäftsjahresende:</strong></div>' +
+                '<div style="font-family: monospace; font-size: 1.05rem; font-weight: 700; color: var(--text);">' +
+                    '5200 Bestandsveränderung FE ' + formatCurrency(absEuro) + '<br>' +
+                    '<span style="margin-left: 2rem;">an 2800 Fertigerzeugnisse (FE) ' + formatCurrency(absEuro) + '</span>' +
+                '</div>' +
+                '<div style="font-size: 0.85rem; color: #ef4444; margin-top: 0.35rem;">' +
+                    '✔ Erfolgskonto 5200 BV im <strong>Soll</strong> belastet (Aufwandswirkung) &nbsp;|&nbsp; Aktivkonto 2800 FE im <strong>Haben</strong> vermindert (&minus;)' +
+                '</div>' +
+            '</div>';
+
+        tkontenHtml = 
+            '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">' +
+                '<div style="border: 1px solid var(--card-border); border-radius: 6px; padding: 0.5rem; background: var(--bg-color);">' +
+                    '<div style="text-align: center; font-weight: 700; border-bottom: 2px solid var(--text); padding-bottom: 0.25rem;">Soll &nbsp; 2800 Fertigerzeugnisse (FE) &nbsp; Haben</div>' +
+                    '<div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 0.85rem; padding: 0.5rem 0;">' +
+                        '<div>AB: ' + formatCurrency(abEuro) + '</div>' +
+                        '<div style="text-align: right;"><span style="color:#ef4444; font-weight:700;">&minus; BV: ' + formatCurrency(absEuro) + '</span><br><span style="color:var(--text-muted);">SB: ' + formatCurrency(sbEuro) + '</span></div>' +
+                    '</div>' +
+                '</div>' +
+                '<div style="border: 1px solid var(--card-border); border-radius: 6px; padding: 0.5rem; background: var(--bg-color);">' +
+                    '<div style="text-align: center; font-weight: 700; border-bottom: 2px solid var(--text); padding-bottom: 0.25rem;">Soll &nbsp; 5200 Bestandsveränderung FE &nbsp; Haben</div>' +
+                    '<div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 0.85rem; padding: 0.5rem 0;">' +
+                        '<div><span style="color:#ef4444; font-weight:700;">2800 FE: ' + formatCurrency(absEuro) + '</span></div>' +
+                        '<div style="text-align: right;">Saldo (an 8020 GuV):<br><span style="color:#ef4444; font-weight:700;">' + formatCurrency(absEuro) + '</span></div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+
+        guvCalcHtml = 
+            '<div style="background: rgba(0, 134, 203, 0.06); border: 1px solid rgba(0, 134, 203, 0.2); border-radius: 6px; padding: 0.75rem 1rem; margin-top: 1rem; font-family: monospace; font-size: 0.95rem;">' +
+                '<div>&nbsp;&nbsp; Umsatzerlöse (5000): &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + formatCurrency(ueb) + '</div>' +
+                '<div style="color: #ef4444; font-weight: 700;">&minus; Bestandsminderung FE (5200): &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&minus;' + formatCurrency(absEuro) + '</div>' +
+                '<div style="border-top: 2px solid var(--fly-blue, #0070f2); margin-top: 0.35rem; padding-top: 0.35rem; font-weight: 800; color: var(--fly-blue, #0070f2);">' +
+                    '= GESAMTLEISTUNG DER PERIODE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + formatCurrency(gesamtleistung) +
+                '</div>' +
+            '</div>';
+
+    } else {
+        statusBadge = '<span style="display:inline-block; padding: 4px 14px; border-radius: 999px; background: rgba(100, 116, 139, 0.2); color: #64748b; font-weight: 700; font-size: 0.95rem;">⚖️ Keine Bestandsveränderung (&Delta;B = 0)</span>';
+
+        buchungssatzBox = 
+            '<div style="background: rgba(100, 116, 139, 0.08); border-left: 4px solid #64748b; padding: 0.75rem 1rem; border-radius: 6px; margin: 0.75rem 0;">' +
+                '<div style="font-family: monospace; font-size: 0.95rem; color: var(--text);">' +
+                    'Da Anfangsbestand und Schlussbestand identisch sind (' + formatCurrency(abEuro) + '), ist keine Buchung auf 5200 erforderlich.' +
+                '</div>' +
+            '</div>';
+
+        tkontenHtml = '';
+
+        guvCalcHtml = 
+            '<div style="background: rgba(0, 134, 203, 0.06); border: 1px solid rgba(0, 134, 203, 0.2); border-radius: 6px; padding: 0.75rem 1rem; margin-top: 1rem; font-family: monospace; font-size: 0.95rem;">' +
+                '<div>&nbsp;&nbsp; Umsatzerlöse (5000): &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + formatCurrency(ueb) + '</div>' +
+                '<div style="color: var(--text-muted);">&plusmn; Bestandsveränderung FE (5200): &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&plusmn;0,00 €</div>' +
+                '<div style="border-top: 2px solid var(--fly-blue, #0070f2); margin-top: 0.35rem; padding-top: 0.35rem; font-weight: 800; color: var(--fly-blue, #0070f2);">' +
+                    '= GESAMTLEISTUNG DER PERIODE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + formatCurrency(gesamtleistung) +
+                '</div>' +
+            '</div>';
+    }
+
+    resultBox.innerHTML = 
+        '<div style="margin-bottom: 0.75rem;">' + statusBadge + '</div>' +
+        '<div style="font-size: 0.9rem; margin-bottom: 0.5rem;">' +
+            '<strong>Berechnung:</strong> Schlussbestand (' + sbQty + ' Stk. &times; ' + formatCurrency(hk) + ' = ' + formatCurrency(sbEuro) + ') ' +
+            '&minus; Anfangsbestand (' + abQty + ' Stk. &times; ' + formatCurrency(hk) + ' = ' + formatCurrency(abEuro) + ') ' +
+            '= <strong>' + (diffEuro >= 0 ? '+' : '') + formatCurrency(diffEuro) + '</strong>' +
+        '</div>' +
+        buchungssatzBox +
+        (tkontenHtml ? '<div style="margin-top: 0.75rem;"><strong>T-Konten-Darstellung:</strong>' + tkontenHtml + '</div>' : '') +
+        '<div style="margin-top: 0.75rem;"><strong>Ermittlung der Gesamtleistung in der GuV:</strong>' + guvCalcHtml + '</div>';
 }
